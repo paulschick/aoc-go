@@ -9,7 +9,6 @@ import (
 // handle file.Close potential error
 // allow use of defer
 func closeFile(f *os.File) {
-	fmt.Println("closing")
 	err := f.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -18,8 +17,6 @@ func closeFile(f *os.File) {
 }
 
 func Reader(fileName string) []string {
-	fmt.Println("Hello from reader")
-
 	f, err := os.Open(fileName)
 
 	if err != nil {
