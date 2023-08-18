@@ -5,43 +5,18 @@ import (
 	"fmt"
 )
 
-type Stack []string
-
-func (s *Stack) Push(v string) {
-	*s = append(*s, v)
-}
-
-func (s *Stack) Pop() (string, bool) {
-	l := len(*s)
-	if l == 0 {
-		return "", false
-	}
-	res := (*s)[l-1]
-	*s = (*s)[:l-1]
-	return res, true
-}
-
 func part1(lines []string) {
-	// top to bottom of the stacks
-	// going by row
-	for _, line := range lines {
-		if line == "" || line[1] == '1' {
-			break
-		}
-		var lineValues []string
-		for i := 1; i < len(line); i += 4 {
-			// last line, pad with spaces
-			if i+4 > len(line) {
-				lineValues = append(lineValues, string(line[i]))
-				remainingColumns := 9 - len(lineValues)
-				for j := 0; j < remainingColumns; j++ {
-					lineValues = append(lineValues, " ")
-				}
-				break
-			}
-			lineValues = append(lineValues, string(line[i]))
-		}
-		fmt.Println(lineValues)
+	//columns := constructStacks(lines)
+
+	//for _, column := range columns {
+	// print the top of the stack
+	//value, _ := column.Pop()
+	//fmt.Println(value)
+	//}
+
+	instructions := parseInstructions(lines)
+	for _, instruction := range instructions {
+		fmt.Println(instruction)
 	}
 }
 
