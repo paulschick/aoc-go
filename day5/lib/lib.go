@@ -1,6 +1,8 @@
-package main
+package lib
 
-func constructStacks(lines []string) []Stack {
+import "day_5/types"
+
+func ConstructStacks(lines []string) []types.Stack {
 	// top to bottom of the stacks
 	// going by row
 	var rows [][]string
@@ -25,7 +27,7 @@ func constructStacks(lines []string) []Stack {
 	}
 
 	// Create []Stack of columns
-	columns := make([]Stack, len(rows[0]))
+	columns := make([]types.Stack, len(rows[0]))
 
 	for _, row := range rows {
 		// the first row is the top of the stack
@@ -39,16 +41,16 @@ func constructStacks(lines []string) []Stack {
 	return columns
 }
 
-func parseInstructions(lines []string) []Instruction {
+func ParseInstructions(lines []string) []types.Instruction {
 	var instructionLines []string
 	for i := 0; i < len(lines); i++ {
 		if lines[i] == "" {
 			instructionLines = lines[i+1:]
 		}
 	}
-	var instructions []Instruction
+	var instructions []types.Instruction
 	for _, line := range instructionLines {
-		instruction, err := NewInstruction(line)
+		instruction, err := types.NewInstruction(line)
 		if err != nil {
 			panic(err)
 		}

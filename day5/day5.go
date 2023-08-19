@@ -2,6 +2,7 @@ package main
 
 import (
 	"aoc/input_data_reader"
+	"day_5/lib"
 	"fmt"
 )
 
@@ -14,7 +15,7 @@ func part1(lines []string) {
 	//fmt.Println(value)
 	//}
 
-	instructions := parseInstructions(lines)
+	instructions := lib.ParseInstructions(lines)
 	for _, instruction := range instructions {
 		fmt.Println(instruction)
 	}
