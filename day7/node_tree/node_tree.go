@@ -52,6 +52,7 @@ type Node struct {
 	Parent   *Node
 	Children []*Node
 	Size     int
+	DirSize  int
 }
 
 func CreateFileNode(line string, parent *Node) *Node {
@@ -69,20 +70,36 @@ func CreateFileNode(line string, parent *Node) *Node {
 		Parent:   parent,
 		Children: nil,
 		Size:     sizeInt,
+		DirSize:  0,
 	}
 }
 
-func CreateDirNode(line string, parent *Node) *Node {
+func CreateDirNode(dirName string, parent *Node) *Node {
 	return &Node{
-		Name:     line[4:],
+		Name:     dirName,
 		Type:     Dir,
 		Parent:   parent,
 		Children: make([]*Node, 0),
 		Size:     0,
+		DirSize:  0,
+	}
+}
+
+func (n *Node) GetSize() int {
+	if n.Type == File {
+		return n.Size
+	} else {
+		if n.DirSize == 0 {
+			for _, child := range n.Children {
+				n.DirSize += child.GetSize()
+			}
+		}
+		return n.DirSize
 	}
 }
 
 func ProcessTree(lines []string) {
+	total := 0
 	// create a hash map with node name and node
 	nodeMap := make(map[string]*Node)
 	var currentDir *Node
@@ -97,31 +114,37 @@ func ProcessTree(lines []string) {
 				parentDir = nil
 			}
 			command := ProcessCommand(line, currentDir, parentDir)
-			fmt.Println("command: ", command)
-			if line[2] == 'c' && line[3] == 'd' {
-				fmt.Println("cd command: ", line)
-				if line[5] == '/' {
-					fmt.Println("cd root")
+			if command.Type == Cd {
+				if command.Args == "/" {
 					root := nodeMap["root"]
 					if root == nil {
-						fmt.Println("root not found")
-						nodeMap["root"] = &Node{
+						currentDir = &Node{
 							Name:     "root",
 							Type:     Dir,
 							Parent:   nil,
 							Children: make([]*Node, 0),
 							Size:     0,
+							DirSize:  0,
 						}
-						currentDir = nodeMap["root"]
-						fmt.Println("root: ", nodeMap["root"])
-						//break
+						nodeMap["root"] = currentDir
 					} else {
-						fmt.Println("root found")
-						fmt.Println("root: ", root)
+						currentDir = root
+						parentDir = nil
 					}
+				} else {
+					// check if the directory is already created
+					parentDir = currentDir
+					dir := nodeMap[command.Args]
+					if dir == nil {
+						// create a new directory
+						dir = CreateDirNode(command.Args, parentDir)
+						nodeMap[command.Args] = dir
+					}
+					currentDir = dir
 				}
-			} else if line[2] == 'l' && line[3] == 's' {
+			} else if command.Type == Ls {
 				if currentDir == nil {
+					fmt.Println("currentDir is nil")
 					continue
 				}
 				// iterate directory and append children
@@ -134,7 +157,7 @@ func ProcessTree(lines []string) {
 						contentLine[1] == 'i' &&
 						contentLine[2] == 'r' {
 						// directory
-						directoryNode := CreateDirNode(contentLine, currentDir)
+						directoryNode := CreateDirNode(contentLine[4:], currentDir)
 						currentDir.Children = append(currentDir.Children, directoryNode)
 					} else {
 						// file
@@ -142,9 +165,16 @@ func ProcessTree(lines []string) {
 						currentDir.Children = append(currentDir.Children, fileNode)
 					}
 				}
+				if currentDir.GetSize() <= 100000 {
+					fmt.Println("currentDir: ", currentDir.Name)
+					fmt.Println("currentDir size: ", currentDir.GetSize())
+					total += currentDir.GetSize()
+				}
 			}
 		}
 		lineNo++
 	}
-	fmt.Println("current dir: ", currentDir)
+	fmt.Println("root dir: ", nodeMap["root"].Name)
+	fmt.Println("number of children: ", len(nodeMap["root"].Children))
+	fmt.Println("total size: ", total)
 }
