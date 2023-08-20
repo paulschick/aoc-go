@@ -1,10 +1,20 @@
-package input_data_reader
+package utils
 
 import (
 	"bufio"
 	"fmt"
 	"os"
 )
+
+func MinInt(nums ...int) int {
+	minNum := nums[0]
+	for _, num := range nums {
+		if num < minNum {
+			minNum = num
+		}
+	}
+	return minNum
+}
 
 // handle file.Close potential error
 // allow use of defer

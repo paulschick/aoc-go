@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc/input_data_reader"
+	"aoc/utils"
 	"fmt"
 	"math"
 	"strconv"
@@ -133,27 +133,17 @@ func findSmallestToDelete(dir *Dir, dirMinSize int) int {
 	smallest := math.MaxInt64
 
 	if dir.totalSize >= dirMinSize {
-		smallest = minInt(smallest, dir.totalSize)
+		smallest = utils.MinInt(smallest, dir.totalSize)
 	}
 
 	for _, child := range dir.Children {
-		smallest = minInt(smallest, findSmallestToDelete(child, dirMinSize))
+		smallest = utils.MinInt(smallest, findSmallestToDelete(child, dirMinSize))
 	}
 	return smallest
 }
 
-func minInt(nums ...int) int {
-	minNum := nums[0]
-	for _, num := range nums {
-		if num < minNum {
-			minNum = num
-		}
-	}
-	return minNum
-}
-
 func main() {
-	lines := input_data_reader.Reader("day7.txt")
+	lines := utils.Reader("day7.txt")
 	fmt.Println("Day 1, Part 1")
 	under100kSum := part1(lines)
 	fmt.Println()

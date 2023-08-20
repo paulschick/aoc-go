@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc/input_data_reader"
+	"aoc/utils"
 	"fmt"
 	"strconv"
 )
@@ -59,7 +59,7 @@ func part2(lines []string) {
 }
 
 func main() {
-	lines := input_data_reader.Reader("day1.txt")
+	lines := utils.Reader("day1.txt")
 	fmt.Println("Day 1, part 1")
 	part1(lines)
 	fmt.Println("Day 1, part 2")

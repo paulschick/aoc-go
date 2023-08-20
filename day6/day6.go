@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc/input_data_reader"
+	"aoc/utils"
 	"fmt"
 	"slices"
 )
@@ -74,7 +74,7 @@ So the answer is 5, because that's the number of characters from the start to th
 */
 func main() {
 	fmt.Println("Day 6, Part 1")
-	inputValue := input_data_reader.Reader("day6.txt")[0]
+	inputValue := utils.Reader("day6.txt")[0]
 	part1(inputValue)
 	fmt.Println("Day 6, Part 2")
 	part2(inputValue)
