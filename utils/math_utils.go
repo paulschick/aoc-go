@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func MinInt(nums ...int) int {
@@ -50,4 +51,22 @@ func Reader(fileName string) []string {
 	}
 
 	return lines
+}
+
+// Abs returns the absolute value of a number
+func Abs(value int) int {
+	if value < 0 {
+		return -value
+	}
+	return value
+}
+
+// ToInt converts a string to an int
+func ToInt(value string) int {
+	num, err := strconv.Atoi(value)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	return num
 }
