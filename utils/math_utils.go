@@ -70,3 +70,13 @@ func ToInt(value string) int {
 	}
 	return num
 }
+
+func SortInts(ints []int) {
+	for i := 0; i < len(ints); i++ {
+		for j := i + 1; j < len(ints); j++ {
+			if ints[i] < ints[j] {
+				ints[i], ints[j] = ints[j], ints[i]
+			}
+		}
+	}
+}
